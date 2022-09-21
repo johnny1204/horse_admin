@@ -1,0 +1,33 @@
+version: '3'
+services:
+  web:
+    build: ./docker/nginx
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 18080:80
+    depends_on:
+      - php
+      - db
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql:cached
+      - ./docker/mysql/initdb:/docker-entrypoint-initdb.d
+
+  php:
+    build: ./docker/php
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html
