@@ -3,7 +3,7 @@ services:
   web:
     build: ./docker/nginx
     volumes:
-      - .:/var/www/html
+      - ./src:/var/www/html
     ports:
       - 18080:80
     depends_on:
@@ -30,4 +30,4 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/var/www/html
+      - ./src:/var/www/html
