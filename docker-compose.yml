@@ -9,12 +9,15 @@ services:
     depends_on:
       - php
       - db
+    networks:
+      - internal
+      - horse-network
 
   db:
     image: mariadb:10.5
     restart: always
     ports:
-      - 3308:3306
+      - 3308:13306
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db
@@ -31,3 +34,21 @@ services:
       - db
     volumes:
       - ./src:/var/www/html
+    networks:
+      - internal
+      - horse-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - "./docker/redis:/data"
+    networks:
+      - horse-network
+
+networks:
+  horse-network:
+    external: true
+  internal:
+    driver: bridge
